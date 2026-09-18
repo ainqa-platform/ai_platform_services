@@ -1,0 +1,14 @@
+# Secrets must never be baked into an image layer -- the container gets its
+# configuration at run time via `--env-file` / compose `env_file` instead
+# (see README "Running in Docker").
+.env
+.env.*
+!.env.example
+
+# Rebuilt inside the image by `npm ci` / `npm run build`
+node_modules
+dist
+
+.git
+.gitignore
+*.log
