@@ -20,6 +20,10 @@
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    // ebm-v1 under src/legacy/ is plain CommonJS JavaScript that is mounted as-is
+    // (see src/legacy/legacy.routes.ts); allowJs lets `nest build` emit it to dist/.
+    // checkJs stays off -- the legacy code is moved verbatim, not re-typed.
+    "allowJs": true
   }
 }

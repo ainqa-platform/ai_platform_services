@@ -2,3 +2,11 @@ node_modules
 dist
 
 *.log
+
+# Real configuration never belongs in the repo -- .dockerignore already keeps it
+# out of the image, and GitHub push protection rejects pushes containing it.
+# Copy .env.example to .env locally, or supply the values at run time via
+# `docker run --env-file` / compose `env_file`.
+.env
+.env.*
+!.env.example

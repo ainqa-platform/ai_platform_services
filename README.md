@@ -40,6 +40,40 @@ npm run build
 npm run start
 ```
 
+## Running in Docker
+
+The image contains only `dist/` and production `node_modules` — **no `.env`**
+(it is excluded by `.dockerignore` so credentials never end up in an image
+layer). Configuration must be supplied at run time, or startup fails with
+`Invalid server configuration: { DATABASE_URL: [ 'Required' ] }`:
+
+```bash
+docker build -t ainqa-ai-platform-server .
+docker run --env-file .env -p 4000:4000 ainqa-ai-platform-server
+```
+
+The `.env` file has to exist on the **host you run the container from**, not
+in the image. With compose:
+
+```yaml
+services:
+  api:
+    image: ainqa-ai-platform-server
+    env_file: .env
+    ports: ["4000:4000"]
+```
+
+On Kubernetes, map a `Secret`/`ConfigMap` in via `envFrom` instead.
+
+To confirm the container actually received its configuration:
+
+```bash
+docker run --rm --env-file .env ainqa-ai-platform-server env | grep DATABASE_URL
+```
+
+Migrations are not run by the image's `CMD` — run `npm run migration:run`
+against the same `DATABASE_URL` before starting a new deployment.
+
 ## Required configuration (`server/.env`)
 
 All variables are validated at startup against a zod schema
