@@ -15,7 +15,15 @@ import { UsecasesModule } from './usecases/usecases.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+      // .env is committed and holds shared configuration; .env.local is
+      // gitignored and holds the values that must not reach the repo (e.g.
+      // OPENAI_API_KEY, which GitHub push protection rejects). Earlier entries
+      // win, so .env.local overrides .env.
+      envFilePath: ['.env.local', '.env'],
+    }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService<AppConfig, true>) => ({

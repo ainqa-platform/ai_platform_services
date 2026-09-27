@@ -17,9 +17,17 @@ export class HealthController {
     return { version };
   }
 
-  // Same value as /api/version, exposed unprefixed for the gateway URL above.
+  // Same value as /api/version, exposed unprefixed for the gateway URL above:
+  //   https://api-dev.infinity.ainqaplatform.in/aiplatformsvc/getversion
   @Get('getversion')
   getVersionUnprefixed(): { version: string } {
+    return { version };
+  }
+
+  // ...and under /api too, since .../aiplatformsvc/api/getversion is the form
+  // that gets used in practice and would otherwise 404.
+  @Get('api/getversion')
+  getVersionPrefixed(): { version: string } {
     return { version };
   }
 }

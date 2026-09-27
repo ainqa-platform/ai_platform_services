@@ -14,6 +14,12 @@
 // ever needed, port it from the original service the same way.
 const axios = require("axios");
 
+// Pista (pistha.kghospital.com) bearer tokens. These were hardcoded in
+// ebm-service-v1; moved to the environment so the token can be rotated
+// without a code change. Set in .env -- see .env.example.
+//   PISTA_LOOKUP_API_TOKEN -> /api/patients/callpista (read: admission details)
+//   PISTA_SAVE_API_TOKEN   -> /api/patients/postpista (write: discharge summary)
+
 const { getParamsFromDb } = require("../helpers/paramsMapping");
 const {
   createLogHeader,
@@ -137,7 +143,7 @@ async function callPistaAPI(req, res) {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer Q7ty8e2Uim72gObzzZeLm2gji29S2SGM3HoRHsIMpFCD0U4wqfmDMQTPfBi8XxGg",
+            `Bearer ${process.env.PISTA_LOOKUP_API_TOKEN}`,
         },
       }
     );
@@ -157,7 +163,7 @@ async function postPistaAPI(req, res) {
         headers: {
           "Content-Type": "application/json",
           Authorization:
-            "Bearer oRHsIMpFCD0U4wqfmDMQTPfBi8XxGg",
+            `Bearer ${process.env.PISTA_SAVE_API_TOKEN}`,
         },
       }
     );
